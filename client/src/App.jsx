@@ -1,10 +1,9 @@
 import { useSelector } from 'react-redux';
-import Header from './components/header';
-import Sidebar from './components/sidebar';
-import Explorer from './components/explorer';
-import Content from './components/content';
-import Footer from './components/footer';
-import ConsoleOverlay from './components/consoleOverlay';
+import Header from './components/layout/header';
+import Sidebar from './components/layout/sidebar';
+import Explorer from './components/layout/explorer/explorer';
+import Content from './components/layout/content';
+import Footer from './components/layout/footer';
 
 const App = () => {
   const explorerVisible = useSelector((state) => state.ui.explorerVisible);
@@ -26,7 +25,6 @@ const App = () => {
         </div>
       </div>
       <Footer />
-      <ConsoleOverlay />
     </div>
   );
 }

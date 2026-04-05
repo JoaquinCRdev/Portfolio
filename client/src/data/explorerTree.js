@@ -40,7 +40,7 @@ const makeProjectChildren = (project) => [
   },
 ];
 
-const explorerTree = [
+export const explorerTree = [
   {
     id: 'root-readme',
     label: 'README.md',
@@ -95,5 +95,3 @@ const explorerTree = [
     })),
   },
 ];
-
-export default explorerTree;
