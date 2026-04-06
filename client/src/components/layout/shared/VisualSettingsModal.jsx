@@ -1,19 +1,10 @@
 import { useEffect } from "react";
 import { X } from "lucide-react";
-
-const settingsSections = [
-  "Commonly Used",
-  "Text Editor",
-  "Workbench",
-  "Window",
-  "Chat",
-  "Features",
-  "Application",
-  "Security",
-  "Extensions",
-];
+import { useTranslation } from "react-i18next";
 
 const VisualSettingsModal = ({ open, onClose, children }) => {
+  const { t } = useTranslation("ui");
+
   useEffect(() => {
     if (!open) return;
 
@@ -33,12 +24,52 @@ const VisualSettingsModal = ({ open, onClose, children }) => {
 
   if (!open) return null;
 
+  const settingsSections = [
+    {
+      key: "cu",
+      label: t("config.settingsSections.cu"),
+      selected: true,
+    },
+    {
+      key: "te",
+      label: t("config.settingsSections.te"),
+    },
+    {
+      key: "wb",
+      label: t("config.settingsSections.wb"),
+    },
+    {
+      key: "window",
+      label: t("config.settingsSections.window"),
+    },
+    {
+      key: "chat",
+      label: t("config.settingsSections.chat"),
+    },
+    {
+      key: "features",
+      label: t("config.settingsSections.features"),
+    },
+    {
+      key: "application",
+      label: t("config.settingsSections.application"),
+    },
+    {
+      key: "security",
+      label: t("config.settingsSections.security"),
+    },
+    {
+      key: "extensions",
+      label: t("config.settingsSections.extensions"),
+    },
+  ];
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <button
         type="button"
         onClick={onClose}
-        aria-label="Close modal overlay"
+        aria-label={t("config.closeOverlay")}
         className="absolute inset-0 bg-[var(--overlay-bg)]"
       />
 
@@ -55,13 +86,13 @@ const VisualSettingsModal = ({ open, onClose, children }) => {
             color: "var(--titlebar-fg)",
           }}
         >
-          <div className="text-sm font-medium">Settings</div>
+          <div className="text-sm font-medium">{t("config.title")}</div>
 
           <button
             type="button"
             onClick={onClose}
             className="grid h-8 w-8 place-items-center rounded-md transition-colors hover:bg-white/10"
-            aria-label="Close settings"
+            aria-label={t("config.closeSettings")}
           >
             <X size={16} />
           </button>
@@ -76,7 +107,7 @@ const VisualSettingsModal = ({ open, onClose, children }) => {
               borderColor: "var(--input-border)",
             }}
           >
-            Search settings
+            {t("config.search")}
           </div>
         </div>
 
@@ -90,12 +121,12 @@ const VisualSettingsModal = ({ open, onClose, children }) => {
             }}
           >
             <div className="space-y-1 text-sm">
-              {settingsSections.map((item, index) => {
-                const selected = index === 0;
+              {settingsSections.map((item) => {
+                const selected = item.selected;
 
                 return (
                   <button
-                    key={item}
+                    key={item.key}
                     type="button"
                     className={[
                       "w-full border-l-2 px-3 py-2 text-left transition-colors",
@@ -104,7 +135,7 @@ const VisualSettingsModal = ({ open, onClose, children }) => {
                         : "border-l-transparent text-[var(--sidebar-fg)] hover:bg-[var(--list-hover-bg)] hover:text-[var(--list-hover-fg)]",
                     ].join(" ")}
                   >
-                    {item}
+                    {item.label}
                   </button>
                 );
               })}
