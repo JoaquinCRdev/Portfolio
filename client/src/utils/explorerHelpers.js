@@ -1,7 +1,3 @@
-const findProjectById = (projects, projectId) => {
+export function findProjectById(projects, projectId) {
   return projects.find((project) => project.id === projectId) || null;
 }
-
-module.exports = {
-    findProjectById,
-};
