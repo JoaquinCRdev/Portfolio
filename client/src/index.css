@@ -275,7 +275,7 @@
   --tab-bg: #FAFAFD;
   --tab-fg: #606060;
   --tab-active-bg: #FFFFFF;
-  --tab-active-fg: #202020;
+  --tab-active-fg: #e8e8e8;
   --tab-border: #F0F1F2FF;
   --tab-active-border: #FFFFFF;
   --tab-active-border-top: #68a3da;
@@ -2385,10 +2385,8 @@ body,
 
 body {
   margin: 0;
-  background:
-    radial-gradient(circle at top left, rgba(0, 122, 204, 0.08), transparent 24%),
-    linear-gradient(180deg, #1f1f1f, #181818);
-  color: #d4d4d4;
+  background: var(--app-bg);
+  color: var(--app-fg);
 }
 
 button,
@@ -2403,17 +2401,17 @@ textarea {
 }
 
 ::-webkit-scrollbar-track {
-  background: #1e1e1e;
+  background: var(--scrollbar-track-bg, transparent);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #4a4a4a;
+  background: var(--scrollbar-slider-bg);
   border-radius: 999px;
-  border: 2px solid #1e1e1e;
+  border: 2px solid var(--app-bg);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #5a5a5a;
+  background: var(--scrollbar-slider-hover-bg);
 }
 
 @layer components {

@@ -1,3 +1,5 @@
+// Explorer.jsx
+import { useEffect } from 'react';
 import {
   ChevronDown,
   ChevronRight,
@@ -86,6 +88,25 @@ export default function Explorer() {
   const selectedItemId = useSelector((state) => state.explorer.selectedItemId);
   const portfolio = useSelector((state) => state.portfolio.data);
   const activeProjectId = useSelector((state) => state.explorer.activeProjectId);
+  const activeTabId = useSelector((state) => state.tabs.activeTabId); // 👈
+
+  useEffect(() => {
+    if (!activeTabId) return;
+
+    const findNodeByTabId = (nodes) => {
+      for (const node of nodes) {
+        if (node.action?.tabId === activeTabId) return node;
+        if (node.children) {
+          const found = findNodeByTabId(node.children);
+          if (found) return found;
+        }
+      }
+      return null;
+    };
+
+    const match = findNodeByTabId(tree);
+    if (match) dispatch(selectItem(match.id));
+  }, [activeTabId, tree, dispatch]);
 
   const handleNodeClick = (node) => {
     dispatch(selectItem(node.id));
@@ -149,7 +170,7 @@ export default function Explorer() {
 
   return (
     <aside className="flex h-full w-full flex-col overflow-hidden border-r border-[var(--sidebar-border)] bg-[var(--sidebar-bg)] text-[var(--sidebar-fg)]">
-      <div className="flex items-center justify-between border-b border-[var(--sidebar-border)] px-4 py-2.5">
+      <div className="flex h-10 min-h-10 items-center justify-between border-b border-[var(--sidebar-border)] px-4">
         <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-[var(--sidebar-title-fg)]">
           Explorer
         </p>

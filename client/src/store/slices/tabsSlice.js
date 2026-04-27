@@ -7,7 +7,7 @@ const tabsSlice = createSlice({
       {
         id: 'account-readme',
         title: 'README.md',
-        kind: 'readme',
+        kind: 'account',
         section: 'account',
       },
     ],
@@ -23,9 +23,11 @@ const tabsSlice = createSlice({
       }
       state.activeTabId = tab.id;
     },
+
     activateTab(state, action) {
       state.activeTabId = action.payload;
     },
+
     closeTab(state, action) {
       const tabId = action.payload;
       const index = state.openTabs.findIndex((tab) => tab.id === tabId);
@@ -40,7 +42,11 @@ const tabsSlice = createSlice({
       }
 
       if (wasActive) {
-        const nextTab = state.openTabs[index] || state.openTabs[index - 1] || state.openTabs[0];
+        const nextTab =
+          state.openTabs[index] ||
+          state.openTabs[index - 1] ||
+          state.openTabs[0];
+
         state.activeTabId = nextTab.id;
       }
     },

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Header from './components/layout/header';
 import Sidebar from './components/layout/sidebar';
 import Explorer from './components/layout/explorer/explorer';
@@ -9,7 +9,6 @@ import Footer from './components/layout/footer';
 import { STORAGE_KEY } from './store/slices/uiSlice';
 
 const App = () => {
-  const dispatch = useDispatch();
   const explorerVisible = useSelector((state) => state.ui.explorerVisible);
   const explorerWidth = useSelector((state) => state.ui.explorerWidth);
 
@@ -21,23 +20,22 @@ const App = () => {
     <div className="flex h-full flex-col overflow-hidden bg-[var(--app-bg)] text-[var(--app-fg)]">
       <Header />
 
-      <div
-        className="grid min-h-0 flex-1 overflow-hidden"
-        style={{
-          gridTemplateColumns: explorerVisible
-            ? `${48}px ${explorerWidth}px 3px minmax(0, 1fr)`
-            : `${48}px 0px 0px minmax(0, 1fr)`,
-        }}
-      >
-        <Sidebar />
+      <div className="flex min-h-0 flex-1 overflow-hidden soft-transition fade-up">
+        <div className="flex h-full min-h-0 shrink-0">
+          <Sidebar />
 
-        <div className="min-w-0 overflow-hidden">
-          <Explorer />
+          <div
+            className="relative h-full min-h-0 overflow-visible"
+            style={{
+              width: explorerVisible ? `${explorerWidth}px` : '0px',
+            }}
+          >
+            <Explorer />
+            <ExplorerResizeHandle />
+          </div>
         </div>
 
-        <ExplorerResizeHandle />
-
-        <div className="min-w-0 overflow-hidden">
+        <div className="min-w-0 flex-1 overflow-hidden">
           <Content />
         </div>
       </div>

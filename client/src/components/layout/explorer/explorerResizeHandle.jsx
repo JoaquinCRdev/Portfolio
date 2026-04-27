@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { clampExplorerWidth, setExplorerWidth } from '../../../store/slices/uiSlice';
 
@@ -7,16 +7,12 @@ export default function ExplorerResizeHandle() {
   const explorerVisible = useSelector((state) => state.ui.explorerVisible);
   const explorerWidth = useSelector((state) => state.ui.explorerWidth);
 
+  const [hovered, setHovered] = useState(false);
+  const [dragging, setDragging] = useState(false);
+
   const draggingRef = useRef(false);
   const startXRef = useRef(0);
   const startWidthRef = useRef(explorerWidth);
-
-  const stopDragging = () => {
-    draggingRef.current = false;
-    document.body.style.cursor = '';
-    document.body.style.userSelect = '';
-    window.removeEventListener('pointermove', handlePointerMove);
-  };
 
   const handlePointerMove = (event) => {
     if (!draggingRef.current) return;
@@ -24,6 +20,14 @@ export default function ExplorerResizeHandle() {
     const delta = event.clientX - startXRef.current;
     const nextWidth = clampExplorerWidth(startWidthRef.current + delta);
     dispatch(setExplorerWidth(nextWidth));
+  };
+
+  const stopDragging = () => {
+    draggingRef.current = false;
+    setDragging(false);
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+    window.removeEventListener('pointermove', handlePointerMove);
   };
 
   const handlePointerUp = () => {
@@ -35,6 +39,7 @@ export default function ExplorerResizeHandle() {
 
     event.preventDefault();
     draggingRef.current = true;
+    setDragging(true);
     startXRef.current = event.clientX;
     startWidthRef.current = explorerWidth;
 
@@ -55,14 +60,26 @@ export default function ExplorerResizeHandle() {
 
   if (!explorerVisible) return null;
 
+  const active = hovered || dragging;
+
   return (
     <div
       role="separator"
       aria-orientation="vertical"
       onPointerDown={handlePointerDown}
-      className="group h-full w-[3px] cursor-col-resize bg-[var(--sidebar-border)]/70 transition-colors hover:bg-[var(--focus-border)]/80"
+      onPointerEnter={() => setHovered(true)}
+      onPointerLeave={() => setHovered(false)}
+      className="absolute right-0 top-0 z-30 h-full w-2 cursor-col-resize select-none touch-none"
+      title="Resize explorer"
     >
-      <div className="h-full w-full bg-transparent group-hover:bg-[var(--focus-border)]/35" />
+      <div
+        className={[
+          'mx-auto h-full w-px transition-colors duration-150',
+          active
+            ? 'bg-[var(--focus-border)]/80'
+            : 'bg-[var(--sidebar-border)]/35 hover:bg-[var(--focus-border)]/70',
+        ].join(' ')}
+      />
     </div>
   );
 }

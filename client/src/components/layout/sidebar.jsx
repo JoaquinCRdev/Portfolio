@@ -5,27 +5,78 @@ import {
   Blocks,
   CircleUser,
   Settings,
-} from "lucide-react";
-import { useDispatch, useSelector } from "react-redux";
-import { activateSection } from "../../store/slices/uiSlice";
-import { useTranslation } from "react-i18next";
+} from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { activateSection } from '../../store/slices/uiSlice';
+import { openTab } from '../../store/slices/tabsSlice';
+import { useTranslation } from 'react-i18next';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
   const activeSection = useSelector((state) => state.ui.activeSection);
-  const { t } = useTranslation("ui");
+  const { t } = useTranslation('ui');
 
   const itemsTop = [
-    { id: "explorer", label: t("sidebar.label.explorer"), icon: Files, badge: null },
-    { id: "experience", label: t("sidebar.label.search"), icon: Search, badge: null },
-    { id: "github", label: t("sidebar.label.sourceControl"), icon: GitBranch, badge: 9 },
-    { id: "skills", label: t("sidebar.label.extensions"), icon: Blocks, badge: null },
+    { id: 'explorer', label: t('sidebar.label.explorer'), icon: Files, badge: null },
+    { id: 'experience', label: t('sidebar.label.search'), icon: Search, badge: null },
+    { id: 'github', label: t('sidebar.label.sourceControl'), icon: GitBranch, badge: 9 },
+    { id: 'skills', label: t('sidebar.label.extensions'), icon: Blocks, badge: null },
   ];
 
   const itemsBottom = [
-    { id: "account", label: t("sidebar.label.account"), icon: CircleUser, badge: null },
-    { id: "settings", label: t("sidebar.label.settings"), icon: Settings, badge: null },
+    { id: 'about', label: t('sidebar.label.account'), icon: CircleUser, badge: null },
+    { id: 'settings', label: t('sidebar.label.settings'), icon: Settings, badge: null },
   ];
+
+  const sectionToTab = {
+    account: {
+      id: 'account-readme',
+      title: 'README.md',
+      kind: 'account',
+      section: 'account',
+    },
+    about: {
+      id: 'about-tab',
+      title: 'about.md',
+      kind: 'about',
+      section: 'about',
+    },
+    experience: {
+      id: 'experience-tab',
+      title: 'experience.md',
+      kind: 'experience',
+      section: 'experience',
+    },
+    github: {
+      id: 'github-tab',
+      title: 'github.md',
+      kind: 'github',
+      section: 'github',
+    },
+    skills: {
+      id: 'skills-tab',
+      title: 'skills.md',
+      kind: 'skills',
+      section: 'skills',
+    },
+    settings: {
+      id: 'settings-tab',
+      title: 'settings.json',
+      kind: 'settings',
+      section: 'settings',
+    },
+  };
+
+  const handleSidebarClick = (section) => {
+    dispatch(activateSection(section));
+
+    if (section === 'explorer') return;
+
+    const tab = sectionToTab[section];
+    if (tab) {
+      dispatch(openTab(tab));
+    }
+  };
 
   const renderItem = (item) => {
     const Icon = item.icon;
@@ -35,28 +86,28 @@ export default function Sidebar() {
       <button
         key={item.id}
         type="button"
-        onClick={() => dispatch(activateSection(item.id))}
+        onClick={() => handleSidebarClick(item.id)}
         aria-label={item.label}
         className={[
-          "group relative flex h-12 w-full items-center justify-center",
-          "transition-colors duration-150 ease-out outline-none",
+          'group relative flex h-12 w-full items-center justify-center',
+          'transition-colors duration-150 ease-out outline-none',
           active
-            ? "bg-[var(--activitybar-active-bg)] text-[var(--activitybar-fg)]"
-            : "text-[var(--activitybar-inactive-fg)] hover:bg-[var(--list-hover-bg)] hover:text-[var(--activitybar-fg)]",
-          "focus-visible:bg-[var(--list-hover-bg)] focus-visible:text-[var(--activitybar-fg)]",
+            ? 'bg-[var(--activitybar-active-bg)] text-[var(--activitybar-fg)]'
+            : 'text-[var(--activitybar-inactive-fg)] hover:bg-[var(--list-hover-bg)] hover:text-[var(--activitybar-fg)]',
+          'focus-visible:bg-[var(--list-hover-bg)] focus-visible:text-[var(--activitybar-fg)]',
           "before:absolute before:left-0 before:top-1/2 before:h-9 before:w-[3px] before:-translate-y-1/2 before:rounded-r-full before:content-['']",
           active
-            ? "before:bg-[var(--activitybar-active-border)]"
-            : "before:bg-transparent group-hover:before:bg-[var(--activitybar-active-border)]",
-        ].join(" ")}
+            ? 'before:bg-[var(--activitybar-active-border)]'
+            : 'before:bg-transparent group-hover:before:bg-[var(--activitybar-active-border)]',
+        ].join(' ')}
       >
         <Icon
           className={[
-            "h-5 w-5 transition-colors duration-150",
+            'h-5 w-5 transition-colors duration-150',
             active
-              ? "text-[var(--activitybar-fg)]"
-              : "text-[var(--activitybar-inactive-fg)] group-hover:text-[var(--activitybar-fg)]",
-          ].join(" ")}
+              ? 'text-[var(--activitybar-fg)]'
+              : 'text-[var(--activitybar-inactive-fg)] group-hover:text-[var(--activitybar-fg)]',
+          ].join(' ')}
         />
 
         {item.badge ? (
